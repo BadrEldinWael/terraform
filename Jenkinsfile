@@ -27,19 +27,12 @@ pipeline {
         }
 
         stage('Configure AWS Credentials') {
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'aws-creds',
-                        usernameVariable: 'AWS_ACCESS_KEY_ID',
-                        passwordVariable: 'AWS_SECRET_ACCESS_KEY'
-                    )
-                ]) {
-
-                    sh 'aws sts get-caller-identity'
-                }
-            }
+    steps {
+        withAWS(credentials: 'aws-creds', region: 'us-east-1') {
+            sh 'aws sts get-caller-identity'
         }
+    }
+}
 
         stage('Login to ECR') {
             steps {
