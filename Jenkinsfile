@@ -64,33 +64,33 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                dir('project') {
+            
                     sh 'terraform init'
-                }
+                
             }
         }
 
         stage('Terraform Validate') {
             steps {
-                dir('project') {
+                
                     sh 'terraform validate'
-                }
+                
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                dir('project') {
+                
                     sh 'terraform plan'
-                }
+            
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                dir('project') {
+                
                     sh 'terraform apply -auto-approve'
-                }
+                
             }
         }
     }
