@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = 'us-east-1'
-        ECR_REPO = 'shopflow'
+        ECR_REPO = 'shopflow-app'
         AWS_ACCOUNT_ID = '200098097766'
 
         IMAGE_TAG = "${BUILD_NUMBER}"
