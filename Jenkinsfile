@@ -22,7 +22,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t shopflow .'
+                sh 'docker build -t shopflow ./app'
             }
         }
 
