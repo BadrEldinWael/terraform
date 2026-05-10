@@ -53,10 +53,16 @@ resource "aws_launch_template" "app" {
   user_data = base64encode(<<-EOF
               #!/bin/bash
               yum update -y
-              amazon-linux-extras install docker -y
-              service docker start
+              yum install -y docker
+              systemctl start docker
+              systemctl enable docker
               usermod -a -G docker ec2-user
-              aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${var.ecr_repository_url}
+
+              # Vital: Wait for Docker to be fully ready
+              sleep 10
+
+              # Authenticate and Pull
+              aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${var.ecr_repository_url}  
               docker pull ${var.ecr_repository_url}:latest
               docker run -d -p 80:80 ${var.ecr_repository_url}:latest
               EOF
