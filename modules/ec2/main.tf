@@ -20,8 +20,8 @@ resource "aws_security_group" "alb_sg" {
 resource "aws_security_group" "app_sg" {
   vpc_id = var.vpc_id
   ingress {
-    from_port       = 8080
-    to_port         = 8080
+    from_port       = 80
+    to_port         = 80
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
   }
@@ -58,7 +58,7 @@ resource "aws_launch_template" "app" {
               usermod -a -G docker ec2-user
               aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${var.ecr_repository_url}
               docker pull ${var.ecr_repository_url}:latest
-              docker run -d -p 8080:80 ${var.ecr_repository_url}:latest
+              docker run -d -p 80:80 ${var.ecr_repository_url}:latest
               EOF
   )
 }
@@ -89,9 +89,18 @@ resource "aws_lb" "app_alb" {
 
 resource "aws_lb_target_group" "app_tg" {
   name     = "${var.project_name}-tg"
-  port     = 8080
+  port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
+  health_check {
+    path                = "/"
+    port                = "80"
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+    timeout             = 5
+    interval            = 30
+    matcher             = "200"
+  }
 }
 
 resource "aws_lb_listener" "front_end" {
