@@ -190,5 +190,3 @@ The pipeline is defined in a `Jenkinsfile` and consists of the following stages:
 </p>
 
 ---
-**Developed by:** [Eslam Harpy](https://github.com/EslamHarpy)
-*Infrastructure & DevOps Engineer*
